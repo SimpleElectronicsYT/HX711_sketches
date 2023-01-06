@@ -72,7 +72,7 @@ void setup() {
   //Make sure the baud rate at the bottom of the window is set to 115200 - or you may see some gibberish
   Serial.begin(115200);
   
-  //Printing an into line to make sure the serial data is coming across, this is just fluff.
+  //Printing an intro line to the serial monitor to make sure the serial data is coming across, this is just fluff.
   Serial.println("let's calibrate this thing!");
 
   //Printing a line to tell the user what is going on, again, just fluff, not really needed
@@ -91,9 +91,6 @@ void setup() {
   //Setting the scale to remove the offset, which is likely just it's own weight - we don't want this while calibrating
   //If you have a platter or a board to put objects on, this should remove the offset it creates.
   scale.tare();
-
-  //Setting a small delay to allow things to settle, this is my personal choice, probably not required.
-  delay(10);
 
   //Letting the user know it is time to place their known weight on their load cell and that the yhave 5 seconds to do so.
   Serial.println("Place something on the scale and wait for confirmation");
