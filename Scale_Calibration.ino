@@ -22,7 +22,7 @@
  * YOU CONNECT THE GROUNDS OF BOTH OF THEM TOGETHER--
  * 
  * DT you will define later on in the code - no worries, I commented my code
- * SCK you till define later on in the code - no worries, I commented my code
+ * SCK you will define later on in the code - no worries, I commented my code
  * 
  * How to calibrate your loadcell:
  * 
