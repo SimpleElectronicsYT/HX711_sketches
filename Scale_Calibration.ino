@@ -68,14 +68,14 @@ HX711 scale;
 
 void setup() {
 
-  //these lines will start up the serial monitoring, make sure to open the serial monitor window to see the data we will be printing to it
-  //almost make sure the baud rate at the bottom of the window is set to 115200 - or you may see some gibberish
+  //These lines will start up the serial monitoring, make sure to open the serial monitor window to see the data we will be printing to it
+  //Make sure the baud rate at the bottom of the window is set to 115200 - or you may see some gibberish
   Serial.begin(115200);
   
-  //printing an into line to make sure the serial data is coming across, this is just fluff.
+  //Printing an into line to make sure the serial data is coming across, this is just fluff.
   Serial.println("let's calibrate this thing!");
 
-  //printing a line to tell the user what is going on, again, just fluff, not really needed
+  //Printing a line to tell the user what is going on, again, just fluff, not really needed
   Serial.println("Initializing the scale...");
   
   //This line will just initialize our loadcell which we named "scale", we are using the two pins we defined earlier.
