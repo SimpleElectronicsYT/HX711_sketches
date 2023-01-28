@@ -9,7 +9,28 @@
  * so I made my own. Enjoy!
  * 
  * This code cannot really be used without first calibrating the loadcell/HX711 combination, please calibrate it first
- * and then input the number into the calibration section (const int cal = ??;
+ * and then input the number into the calibration section (const int cal = ??;)
+ * 
+ * You can find my sketch for calibrating the loadcell here: https://github.com/SimpleElectronicsYT/HX711_sketches
+ * 
+ * First you need to hook up the HX711 module to your load sensor;
+ * 
+ * RED to E+
+ * BLACK to E-
+ * WHITE to A-
+ * GREEN to A+
+ *  
+ * And then you need to hook the module up to your microcontroller:
+ *
+ * VCC to any 5v source (I used the 5v pin on my Arduino)
+ * GND to any ground source (I used the GND pin on my Arduino)
+ * 
+ * --PLEASE MAKE SURE THAT IF YOUR ARDUINO IS POWERED SEPARATELY TO YOUR HX711 BOARD THAT
+ * YOU CONNECT THE GROUNDS OF BOTH OF THEM TOGETHER--
+ * 
+ * DT you will define later on in the code - no worries, I commented my code
+ * SCK you will define later on in the code - no worries, I commented my code
+ * 
  * 
  * You NEED the HX711 library. I used the one in the Arduino library manager, "HX711 Arduino Library" by Bogdan Necula
  */
@@ -22,7 +43,8 @@
 const int LOADCELL_DOUT_PIN = 2;
 const int LOADCELL_SCK_PIN = 3;
 
-//We need to define a pin to use the "xxxx.tare()" function to zero the weight - I picked 4 here, arbirarily.
+//We need to define a pin to use a button to trigger the "xxxx.tare()" function which zeros the weight on the scale - I picked pin 4 here, arbirarily.
+//Any pin that can be used as an input can be chosen here.
 const int tareBtn = 4;
 
 
@@ -30,24 +52,30 @@ const int tareBtn = 4;
 //https://github.com/SimpleElectronicsYT/HX711_sketches/blob/main/Scale_Calibration.ino
 const int cal = 1;
 
-//Give a name to your object, "Scale" in this case, it can be whatever you want though!
+//Give a name to your scale, "scale" in this case, it can be whatever you want though - just remember you have to call it by name in the code.
 HX711 scale;
 
+//The "Setup" function only runs once on every time the device is powered on.
 void setup() {
 
-  //Setting out "tare" button pin to be an input and to use the interal pullup resistors so that no external resistor is needed and the state, unless pressed will be "HIGH"
+  //Setting out "tare" button pin to be an input and to use the interal pullup resistors so that no external resistor is needed and the
+  //microcontroller will always see it as a "HIGH" unless a button is pressed. It is good practice to always force an input pin into a known state.
   pinMode(tareBtn, INPUT_PULLUP);
   
   //These lines start up the serial monitor, they aren't needed if you plan on using a display, but if you remove them, make sure to remove all the serial commands in the code.
   //Make sure to set the baud rate dropdown at the bottom of the serial monitor to 115200 or you may get gibberish in the serial monitor window.
+  //more information on using the serial monitor can be found here: https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor
   Serial.begin(115200);
 
   //This line prints a message to the serial monitor to confirm that the monitor is working. Again, this isn't needed for the core functionality of the code.
+  //But it is a nice step to confirm the code ahas made it this far and the baud rate is correct.
   Serial.println("Serial communications are operational!");
 
   //This line will let us know that the loadcell is initializing by sending a message to the serial monitor.
+  //This is also not required, but agin, is nice to know where the code is at
   Serial.println("Initializing the loadcell...");
-  //Here is the actual initialization of the loadcell now. The two variables in the brackets are the ones setting which pins are being used for DOUT and SCK.
+  
+  //Here is the actual initialization of the loadcell now. The two variables in the brackets are the ones telling the library which pins are being used for DOUT and SCK.
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
   //Here is where we will use the calibration number you set higher up to actually calibrate the scale, it goes in the brackets of the set_scale() function
@@ -58,20 +86,26 @@ void setup() {
   scale.tare();
 }
 
+//The "loop" function runs over and over ad infinitum once the "setup" function is complete.
 void loop() {
 
-  //This is where the checking takes place to tell if the "tare" button is pressed or not.
+  //This is where the checking takes place to tell if the "tare" button is pressed or not. - it is normally "HIGH" because of the INPUT_PULLUP we set earlier
+  //and if the user presses the button, it will read "LOW"
   if(digitalRead(tareBtn) == LOW){
+    
     //IF the "tare" button's pin is pulled to ground (a.k.a. LOW) then we call the "xxxx.tare()" function which zeroes the scale.
     scale.tare();
+    
     //Adding a short delay to give the user time to remove their finger from the "tare" button and then back to business as usual.
     delay(250);
   }
   
   //This is how we get the actual weight on the scale. The number in brackets corresponds to how many measurements it will take and average out to give us the final answer.
+  //10 is a good starting point, but feel free to experiment with different values here.
   Serial.println(scale.get_units(10));
 
-  //Setting a delay to limit how often the code retrieves weight data
+  //Setting a delay to limit how often the code retrieves weight data - feel free to have your code do other things aswell or instead of this.
+  //I find 500mS is a decent delay
   delay(500);
 
 }
