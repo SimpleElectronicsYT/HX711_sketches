@@ -6,6 +6,8 @@
  * The author of the library did a great job making the library but I found it hard to follow the examples,
  * so I made my own. Enjoy!
  * 
+ * You can find the sketches for the HX711 here: https://github.com/SimpleElectronicsYT/HX711_sketches
+ * 
  * First you need to hook up the HX711 module to your load sensor;
  * 
  * RED to E+
@@ -28,8 +30,10 @@
  * 
  * The goal here is to come up with a value to put into the "set_scale()" function's parameter (the space between the backets),
  * here is how we do that:
- *    NOTE:Make sure you open your serial monitor, that is where the information will be displayed.
- * 
+ *    NOTE:Make sure you open your serial monitor (default hotkey is CTRL+SHIFT+M in the Arduino IDE)
+ *    that is where the information will be displayed (more information on the serial monitor can be found
+ *    at:https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor) 
+ *     
  * 1: We will call the set_scale function with no parameter (with the brackets empty).
  * 
  * 2: We will call the tare() function with no parameter either, to zero out the reading.
@@ -66,6 +70,7 @@ const int LOADCELL_SCK_PIN = 3;
 //Give your object a name to be used in the code, "scale" is used in this case, but it can be whatever you would like
 HX711 scale;
 
+//The "Setup" function only runs once on every time the device is powered on.
 void setup() {
 
   //These lines will start up the serial monitoring, make sure to open the serial monitor window to see the data we will be printing to it
@@ -103,6 +108,7 @@ void setup() {
   
 }
 
+//The "loop" function runs over and over ad infinitum once the "setup" function is complete.
 void loop() {
 
  //Nothing in here - doesn't seem to be needed. Subscribe to Simple Electronics (https://www.youtube.com/SimpleElectronics)
